@@ -3,6 +3,16 @@ from matplotlib import pyplot as plt
 import numpy as np
 from math import e
 from math import log as log
+import os
+import imageio
+import datetime
+
+# cwd = os.getcwd()
+# base_folder_name = 'images'
+# base_folder_loc = cwd + '/' + base_folder_name + '/'
+# os.mkdir(base_folder_loc)
+time = str(datetime.datetime.now())
+file_ext = time[-2:]
 
 
 def sigmoid(x):
@@ -53,11 +63,12 @@ Xc, ytrue = make_moons(n_samples=50, noise=0.2, random_state=42)
 X = np.hstack([Xc, np.ones((Xc.shape[0], 1))])
 sig_x = sigmoid(X)
 
-
+fig = plt.figure()
 loss_plot = []
 x = []
 losses = []
-for i in range(200):
+images = []
+for i in range(150):
     if i == 0:
         outer_weights = np.random.random(size=(3, 1))
         inner_weights = np.random.random(size=(3, 2))
@@ -74,19 +85,26 @@ for i in range(200):
     print('iteration is: ', i)
     print('\n\n')
     losses.append(desc_loss)
-    if i > 10:
-        ypred[ypred >= 0.5] = 1
-        ypred[ypred <= 0.5] = 0
-        ypred = ypred.astype(int)
-        plt.scatter(X[:, 0], X[:, 1], c=ypred)
-        plt.show()
-        if losses[-10] < losses[i]:
-            break
+    # if i > 10:
+    ypred[ypred >= 0.5] = 1
+    ypred[ypred <= 0.5] = 0
+    ypred = ypred.astype(int)
+    plot = plt.scatter(X[:, 0], X[:, 1], c=ypred)
+    plt.title(f'Epoch: {i} Loss: {desc_loss:.2f}')
+    filename = 'lifeexp_{}.png'.format(i)
+    plt.savefig(filename)
+    images.append(imageio.imread(filename))
+    # if losses[-10] < losses[i]:
+    #     break
+imageio.mimsave(f'output{file_ext}.gif', images, fps=20)
+
+print(f'Saved gif to output{file_ext}.gif')
+
 
 # ypred[ypred >= 0.5] = 1
 # ypred[ypred <= 0.5] = 0
 # ypred = ypred.astype(int)
 # plt.scatter(X[:, 0], X[:, 1], c=ypred)
 # plt.show()
-plt.plot(x, losses)
-plt.show()
+# plt.plot(x, losses)
+# plt.show()
