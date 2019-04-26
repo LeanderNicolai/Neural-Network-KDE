@@ -71,7 +71,7 @@ loss_plot = []
 x = []
 losses = []
 images = []
-for i in range(200):
+for i in range(15):
     if i == 0:
         outer_weights = np.random.random(size=(3, 1))
         inner_weights = np.random.random(size=(3, 2))
@@ -103,11 +103,10 @@ for i in range(200):
     plt.figure()
     sns.kdeplot(zero_y_one, one_y_one, shade=False, kde=True)
     sns.kdeplot(zero_y_two, one_y_two, shade=False, kde=True)
-    # sns.scatterplot(X[:, 0], X[:,1], size=0.03, legend=False)
     plot = plt.scatter(X[:, 0], X[:, 1], c=ypred)
     plt.title(f'Epoch: {i} Loss: {desc_loss:.2f} Accuracy:  {acc}')
     filename = 'lifeexp_{}.png'.format(i)
-    plt.savefig(filename)
+    plt.savefig('pngs/' + filename)
     images.append(imageio.imread(filename))
     # if i > 11:
     #     if losses[-10] < losses[i]:
